@@ -12,6 +12,7 @@ export default class Index extends React.Component {
     index: 1,
     showHide: false,
     predictioning: false,
+    printing: false,
   };
 
   componentDidMount() {
@@ -68,6 +69,18 @@ export default class Index extends React.Component {
     }
 
     return {
+      toolbox: {
+        show: true,
+        feature: {
+          dataZoom: {
+            yAxisIndex: 'none'
+          },
+          dataView: {readOnly: false},
+          magicType: {type: ['line', 'bar']},
+          restore: {},
+          saveAsImage: {}
+        }
+      },
       xAxis: {
         type: 'value',
       },
@@ -97,12 +110,22 @@ export default class Index extends React.Component {
 
   prediction = () => {
     this.setState({ predictioning: true }, () => {
-
+    message.info('正在由后端进行数据预测',4);
       setTimeout(() => {
         this.setState({ showHide: true, predictioning: false });
+        message.success('预测完成',1);
       }, 5000);
 
     });
+  };
+
+  print = () => {
+    this.setState({printing: true});
+    message.info('正在寻找设备',2);
+    setTimeout(() => {
+      message.error('没有检查到打印设备', 1);
+      this.setState({printing: false});
+    }, 3000);
   };
 
   render() {
@@ -117,7 +140,7 @@ export default class Index extends React.Component {
       timeMarkArea,
       stepMarkArea,
     } = chart;
-    const { index, predictioning } = this.state;
+    const { index, predictioning,printing } = this.state;
     return (
       <Card>
         <Row style={{ marginBottom: 10 }}>
@@ -154,9 +177,14 @@ export default class Index extends React.Component {
               {this.renderDataSelect()}
             </Select>
           </Col>
-          <Col span={4} offset={10}>
+          <Col span={4} offset={6}>
             <Spin spinning={predictioning}>
               <Button type='primary' onClick={this.prediction}>开始预测</Button>
+            </Spin>
+          </Col>
+          <Col span={4}>
+            <Spin spinning={printing}>
+              <Button type='primary' onClick={this.print}>打印结果</Button>
             </Spin>
           </Col>
         </Row>

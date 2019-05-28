@@ -9,8 +9,18 @@ export default {
     timeMarkArea: {
       data: [],
     },
+    timeMarkLine: {
+      x1: 0,
+      x2: 0,
+      x3: 0,
+    },
     stepMarkArea: {
       data: [],
+    },
+    stepMarkLine: {
+      x1: 0,
+      x2: 0,
+      x3: 0,
     },
   },
   effects: {
@@ -28,9 +38,6 @@ export default {
   },
   reducers: {
     saveData(state, { index, payload }) {
-      console.log('开始reducers');
-
-
       let arr = payload.split(',');
       let resArr = [];
       let max = -999;
@@ -49,23 +56,29 @@ export default {
       let jfg = Math.random() * max + min;
       let pr = Math.random() * max + min;
 
-      let begin = parseInt(Math.random() * arr.length);
-      let end = parseInt(Math.random() * (arr.length - begin));
+      let begin = parseInt(Math.random() * 750);
+      let end = parseInt(Math.random() * (750 - begin));
       state.timeMarkArea.data = [[{
         xAxis: begin,
       }, {
         xAxis: begin + end,
       }]];
+      state.timeMarkLine.x1 = begin;
+      state.timeMarkLine.x2 = begin + end / 2;
+      state.timeMarkLine.x3 = begin + end;
 
-      begin = parseInt(Math.random() * arr.length);
-      end = parseInt(Math.random() * (arr.length - begin));
+      begin = parseInt(Math.random() * 750);
+      end = parseInt(Math.random() * (750 - begin));
       state.stepMarkArea.data = [[{
         xAxis: begin,
       }, {
         xAxis: begin + end,
       }]];
+      state.stepMarkLine.x1 = begin;
+      state.stepMarkLine.x2 = begin + end / 2;
+      state.stepMarkLine.x3 = begin + end;
 
-      state.chartDataList[index] = resArr.slice(0,750);
+      state.chartDataList[index] = resArr.slice(0, 750);
       state.hideChartDataList[index] = resArr.slice(750);
       return {
         ...state,
