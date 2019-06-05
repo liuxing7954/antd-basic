@@ -22,6 +22,8 @@ export default {
       x2: 0,
       x3: 0,
     },
+    fuckData1:[],
+    fuckData2:[],
   },
   effects: {
     * getData({ payload, callback }, { call, put }) {
@@ -35,8 +37,54 @@ export default {
       if (callback)
         callback(res);
     },
+    * getData1({ payload, callback }, { call, put }) {
+      // console.log(res);
+      let res = yield call(getData, payload.index);
+      yield put({
+        type: 'saveData1',
+        payload: res,
+        index: payload.index,
+      });
+      if (callback)
+        callback(res);
+    },
+    * getData2({ payload, callback }, { call, put }) {
+      // console.log(res);
+      let res = yield call(getData, payload.index);
+      yield put({
+        type: 'saveData2',
+        payload: res,
+        index: payload.index,
+      });
+      if (callback)
+        callback(res);
+    },
   },
   reducers: {
+    saveData1(state, { index, payload }) {
+      let arr = payload.split(',');
+      let resArr = [];
+      arr.map((item, index) => {
+        resArr.push([index, item]);
+      });
+
+      state.fuckData1 = resArr.slice(0, 750);
+      return {
+        ...state,
+      };
+    },
+    saveData2(state, { index, payload }) {
+      let arr = payload.split(',');
+      let resArr = [];
+      arr.map((item, index) => {
+        resArr.push([index, item]);
+      });
+
+      state.fuckData2 = resArr.slice(0, 750);
+      return {
+        ...state,
+      };
+    },
     saveData(state, { index, payload }) {
       let arr = payload.split(',');
       let resArr = [];

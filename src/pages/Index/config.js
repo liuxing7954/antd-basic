@@ -40,7 +40,7 @@ export default class Index extends React.Component {
     });
   };
 
-  getOption = () => {
+  getOption = (markLine = {}) => {
     const { dispatch, chart } = this.props;
     const { chartDataList, hideChartDataList } = chart;
     const { index, showHide } = this.state;
@@ -56,6 +56,45 @@ export default class Index extends React.Component {
         xAxis: 0,
       }]],
     };
+
+
+    let markLine1 = {};
+    let markLine2 = {};
+    let markLine3 = {};
+    if (!!markLine.x1 && showHide) {
+      markLine1 = {
+        symbol: 'none',
+        label: {
+          formatter: '起裂点',
+        },
+        data: [{
+          name: '起裂点',
+          xAxis: markLine.x1,
+        }],
+      };
+      markLine2 = {
+        symbol: 'none',
+        label: {
+          formatter: '裂纹扩展点',
+          position: 'start',
+        },
+        data: [{
+          name: '裂纹扩展点',
+          xAxis: markLine.x2,
+        }],
+      };
+      markLine3 = {
+        symbol: 'none',
+        label: {
+          formatter: '断裂点',
+        },
+        data: [{
+          name: '断裂点',
+          xAxis: markLine.x3,
+        }],
+      };
+    }
+    console.log('起裂点',markLine1);
     if (showHide) {
       console.log('渲染预测后的结果');
       data = data.concat(hideChartDataList[index]);
@@ -93,6 +132,18 @@ export default class Index extends React.Component {
         showSymbol: false,
         hoverAnimation: false,
         markArea,
+      }, {
+        type: 'line',
+        markLine: markLine1,
+        data: [],
+      }, {
+        type: 'line',
+        markLine: markLine2,
+        data: [],
+      }, {
+        type: 'line',
+        markLine: markLine3,
+        data: [],
       }],
     };
   };
@@ -139,7 +190,9 @@ export default class Index extends React.Component {
       pr,
       timeMarkArea,
       stepMarkArea,
+      timeMarkLine
     } = chart;
+    console.log(timeMarkLine);
     const { index, predictioning,printing } = this.state;
     return (
       <Card>
@@ -191,7 +244,7 @@ export default class Index extends React.Component {
         <Tabs defaultActiveKey="1">
           <Tabs.TabPane tab="分析预测" key="1">
             <Spin spinning={loading}>
-              <ReactEcharts option={this.getOption({})}/>
+              <ReactEcharts option={this.getOption(timeMarkLine)}/>
             </Spin>
           </Tabs.TabPane>
         </Tabs>

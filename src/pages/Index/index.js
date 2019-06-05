@@ -32,6 +32,23 @@ export default class Index extends React.Component {
         // console.log(res);
       },
     });
+
+    dispatch({
+      type: 'chart/getData1',
+      payload: {
+        index: 18,
+      },
+      callback: (res) => {
+      },
+    });
+    dispatch({
+      type: 'chart/getData2',
+      payload: {
+        index: 17,
+      },
+      callback: (res) => {
+      },
+    });
   };
 
   onSelect = (val) => {
@@ -50,6 +67,180 @@ export default class Index extends React.Component {
       return {};
     }
     let data = chartDataList[index];
+
+    let markLine1 = {};
+    let markLine2 = {};
+    let markLine3 = {};
+    if (!!markLine.x1) {
+      markLine1 = {
+        symbol: 'none',
+        label: {
+          formatter: '起裂点',
+        },
+        data: [{
+          name: '起裂点',
+          xAxis: markLine.x1,
+        }],
+      };
+      markLine2 = {
+        symbol: 'none',
+        label: {
+          formatter: '裂纹扩展点',
+          position: 'start',
+        },
+        data: [{
+          name: '裂纹扩展点',
+          xAxis: markLine.x2,
+        }],
+      };
+      markLine3 = {
+        symbol: 'none',
+        label: {
+          formatter: '断裂点',
+        },
+        data: [{
+          name: '断裂点',
+          xAxis: markLine.x3,
+        }],
+      };
+    }
+    return {
+      toolbox: {
+        show: true,
+        feature: {
+          dataZoom: {
+            yAxisIndex: 'none'
+          },
+          dataView: {readOnly: false},
+          magicType: {type: ['line', 'bar']},
+          restore: {},
+          saveAsImage: {}
+        }
+      },
+      xAxis: {
+        type: 'value',
+      },
+      yAxis: {
+        type: 'value',
+      },
+      series: [{
+        data: data,
+        type: 'line',
+        smooth: true,
+        showSymbol: false,
+        hoverAnimation: false,
+        markArea: markArea,
+      }, {
+        type: 'line',
+        markLine: markLine1,
+        data: [],
+      }, {
+        type: 'line',
+        markLine: markLine2,
+        data: [],
+      }, {
+        type: 'line',
+        markLine: markLine3,
+        data: [],
+      }],
+    };
+  };
+  getOption1 = (markArea = {}, markLine = {}) => {
+    const { dispatch, chart } = this.props;
+    const { fuckData1 } = chart;
+    const { index } = this.state;
+    console.log(fuckData1);
+    if (!fuckData1) {
+      return {};
+    }
+    let data = fuckData1;
+
+    let markLine1 = {};
+    let markLine2 = {};
+    let markLine3 = {};
+    if (!!markLine.x1) {
+      markLine1 = {
+        symbol: 'none',
+        label: {
+          formatter: '起裂点',
+        },
+        data: [{
+          name: '起裂点',
+          xAxis: markLine.x1,
+        }],
+      };
+      markLine2 = {
+        symbol: 'none',
+        label: {
+          formatter: '裂纹扩展点',
+          position: 'start',
+        },
+        data: [{
+          name: '裂纹扩展点',
+          xAxis: markLine.x2,
+        }],
+      };
+      markLine3 = {
+        symbol: 'none',
+        label: {
+          formatter: '断裂点',
+        },
+        data: [{
+          name: '断裂点',
+          xAxis: markLine.x3,
+        }],
+      };
+    }
+    return {
+      toolbox: {
+        show: true,
+        feature: {
+          dataZoom: {
+            yAxisIndex: 'none'
+          },
+          dataView: {readOnly: false},
+          magicType: {type: ['line', 'bar']},
+          restore: {},
+          saveAsImage: {}
+        }
+      },
+      xAxis: {
+        type: 'value',
+      },
+      yAxis: {
+        type: 'value',
+      },
+      series: [{
+        data: data,
+        type: 'line',
+        smooth: true,
+        showSymbol: false,
+        hoverAnimation: false,
+        markArea: markArea,
+      }, {
+        type: 'line',
+        markLine: markLine1,
+        data: [],
+      }, {
+        type: 'line',
+        markLine: markLine2,
+        data: [],
+      }, {
+        type: 'line',
+        markLine: markLine3,
+        data: [],
+      }],
+    };
+  };
+  getOption2 = (markArea = {}, markLine = {}) => {
+    const { dispatch, chart } = this.props;
+    const { fuckData2 } = chart;
+    const { index } = this.state;
+    console.log(fuckData2);
+    if (!fuckData2) {
+      return {};
+    }
+    let data = fuckData2;
 
     let markLine1 = {};
     let markLine2 = {};
@@ -286,12 +477,14 @@ export default class Index extends React.Component {
           </Tabs.TabPane>
           <Tabs.TabPane tab="频域分析" key="2">
             <Spin spinning={loading}>
-              <ReactEcharts option={this.getOption(timeMarkArea, timeMarkLine)}/>
+              {/*<ReactEcharts option={this.getOption(timeMarkArea, timeMarkLine)}/>*/}
+              <ReactEcharts option={this.getOption1()}/>
             </Spin>
           </Tabs.TabPane>
           <Tabs.TabPane tab="时域分析" key="3">
             <Spin spinning={loading}>
-              <ReactEcharts option={this.getOption(stepMarkArea, stepMarkLine)}/>
+              {/*<ReactEcharts option={this.getOption(stepMarkArea, stepMarkLine)}/>*/}
+              <ReactEcharts option={this.getOption2()}/>
             </Spin>
           </Tabs.TabPane>
         </Tabs>
